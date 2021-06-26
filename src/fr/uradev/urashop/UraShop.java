@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class UraShop extends JavaPlugin {
 
@@ -98,7 +97,6 @@ public class UraShop extends JavaPlugin {
     }
 
     public boolean isCategory(ItemStack item) {
-        Material item_material = item.getType();
         return categorys.contains(item);
     }
 
@@ -111,7 +109,51 @@ public class UraShop extends JavaPlugin {
         return inventory.getName().contains("UraShop");
     }
 
+    public boolean isUraShopCategorys(Inventory inventory) {
+        FileConfiguration data = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
+
+        for (String category : data.getStringList("categorys_names")) {
+            if (inventory.getName().contains(category)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Inventory basicInventory(int rows, String title) {
+        Inventory inventory = Bukkit.createInventory(null, rows * 9, title);
+
+        ItemStack pannel = customItemStack(Material.STAINED_GLASS_PANE, " ", (byte) 7);
+        ItemStack arrow = customItemStack(Material.ARROW, ChatColor.RED + "Back");
+
+        for (int i = 0; i < inventory.getSize(); i++) {
+            if (i < 9 || i > inventory.getSize() - 9 || i % 9 == 0 || i % 9 == 8) {
+                inventory.setItem(i, pannel);
+            }
+            if (i == inventory.getSize() - 5) {
+                inventory.setItem(i, arrow);
+            }
+        }
+        return inventory;
+    }
+
+    public ItemStack customItemStack(Material material, String name) {
+        ItemStack stack = new ItemStack(material);
+        ItemMeta meta = stack.getItemMeta();
+        meta.setDisplayName(name);
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
+    public ItemStack customItemStack(Material material, String name, byte metadata) {
+        ItemStack stack = new ItemStack(material, 1, metadata);
+        ItemMeta meta = stack.getItemMeta();
+        meta.setDisplayName(name);
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
+    public Inventory fullInventory(int rows, String title) {
         Inventory inventory = Bukkit.createInventory(null, rows * 9, title);
         ItemStack pannel = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 7);
         ItemMeta meta = pannel.getItemMeta();
@@ -120,9 +162,9 @@ public class UraShop extends JavaPlugin {
         pannel.setItemMeta(meta);
 
         for (int i = 0; i < inventory.getSize(); i++) {
-            if (i < 9 || i > inventory.getSize() - 9 || i % 9 == 0 || i % 9 == 8) {
-                inventory.setItem(i, pannel);
-            }
+
+            inventory.setItem(i, pannel);
+
         }
         return inventory;
     }

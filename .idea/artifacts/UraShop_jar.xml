@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="UraShop:jar">
+    <output-path>$PROJECT_DIR$/../../../minecraft/serv_dev/plugins</output-path>
+    <root id="archive" name="UraShop.jar">
+      <element id="module-output" name="UraShop" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../minecraft/serv_dev/spigot.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

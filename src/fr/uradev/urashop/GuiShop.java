@@ -22,7 +22,7 @@ public class GuiShop implements Listener {
     public void onInventoryInteraction(InventoryClickEvent e) {
 
         ItemStack item_stack = e.getCurrentItem();
-        Inventory inventory = e.getInventory();
+        Inventory inventory = e.getClickedInventory();
         Player player;
 
         if (e.getWhoClicked() instanceof Player)
@@ -31,7 +31,7 @@ public class GuiShop implements Listener {
         if (shop.isUraShopInventory(inventory)) {
             if (!shop.isPannel(item_stack)) {
                 if (shop.isCategory(item_stack)) {
-
+                    Inventory category = shop.basicInventory(5,"UraShop - " + item_stack.getItemMeta().getDisplayName());
                 }
             }
             e.setCancelled(true);
@@ -46,7 +46,20 @@ public class GuiShop implements Listener {
         String[] args = msg.split(" ");
 
         if (args[0].equalsIgnoreCase("/shop")) {
-            p.openInventory(shop.basicInventory(6, "UraShop"));
+            Inventory main = shop.basicInventory(3, "UraShop"); //(int) Math.ceil(shop.categorys.size() / 7)
+
+            int pos[];
+            if(shop.categorys.size() % 2 == 0){
+                pos = new int[]{12,14,10,16,11,15};
+            }else{
+                pos = new int[]{13,11,15,12,14,16,10};
+            }
+            int i = 0;
+            for (ItemStack category : shop.categorys) {
+                main.setItem(pos[i],category);
+                i ++;
+            }
+            p.openInventory(main);
         }
     }
 

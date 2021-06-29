@@ -66,7 +66,7 @@ public class UraShop extends JavaPlugin {
 
             for (String category : data.getStringList("categorys")) {
                 String path = "categorys_parameters." + category;
-                HashMap<String, String> item_data = covertItemData(data.getString(path + ".item"));
+                HashMap<String, String> item_data = convertItemData(data.getString(path + ".item"),3);
                 ItemStack stack = new ItemStack(Material.getMaterial(item_data.get("type")));
                 ItemMeta meta = stack.getItemMeta();
                 meta.setDisplayName(ChatColor.valueOf(item_data.get("color")) + item_data.get("name"));
@@ -82,15 +82,15 @@ public class UraShop extends JavaPlugin {
 
     }
 
-    public HashMap<String, String> covertItemData(String data) {
+    public HashMap<String, String> convertItemData(String data, int number_of_data) {
         HashMap<String, String> hash = new HashMap<>();
-        int pointers[] = new int[4];
+        int pointers[] = new int[number_of_data];
 
-        for (int i = 0; i <= 2; i++) {
+        for (int i = 0; i < number_of_data; i++) {
             int next_index = i == 0 ? 0 : pointers[i - 1] + 1;
             int index_end = data.indexOf("=", next_index);
-            pointers[i] = data.indexOf(",", next_index);
-            hash.put(data.substring(next_index, index_end), data.substring(index_end + 1, i == 2 ? data.length() : pointers[i]));
+            pointers[i] = data.indexOf(";", next_index);
+            hash.put(data.substring(next_index, index_end), data.substring(index_end + 1, i == number_of_data-1 ? data.length() : pointers[i]));
         }
 
         return hash;
@@ -145,6 +145,15 @@ public class UraShop extends JavaPlugin {
         return stack;
     }
 
+    public ItemStack customItemStack(Material material, String name, List<String> lore) {
+        ItemStack stack = new ItemStack(material);
+        ItemMeta meta = stack.getItemMeta();
+        meta.setDisplayName(name);
+        meta.setLore(lore);
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
     public ItemStack customItemStack(Material material, String name, byte metadata) {
         ItemStack stack = new ItemStack(material, 1, metadata);
         ItemMeta meta = stack.getItemMeta();
@@ -168,6 +177,30 @@ public class UraShop extends JavaPlugin {
         }
         return inventory;
     }
+
+    public String getCategory(ItemStack stack){
+        FileConfiguration data = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
+
+        for (String category : data.getStringList("categorys")) {
+            String item_data = data.getString("categorys_parameters." + category +".item");
+            HashMap<String,String> item_hash = convertItemData(item_data,3);
+            if(stack.equals(customItemStack(Material.getMaterial(item_hash.get("type")),ChatColor.valueOf(item_hash.get("color")) + item_hash.get("name")))){
+                return category;
+            }
+        }
+        return null;
+    }
+/*
+    public int getItemCategory(ItemStack stack){
+        FileConfiguration data = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
+
+        for (String category : data.getStringList("categorys_names")) {
+            List<String> content = data.getStringList("categorys_content." + category);
+            content.
+        }
+    }*/
+
+
 }
 
 /*

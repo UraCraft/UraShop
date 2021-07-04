@@ -1,6 +1,6 @@
 # UraShop
 
-### Configuration syntax:
+###Configuration syntax:
 
 ###Create catergory :
 

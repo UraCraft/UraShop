@@ -1,6 +1,47 @@
 # UraShop
 
-### UraCraft config :
+### Configuration syntax:
+
+####Create catergory :
+
+######Item syntax:
+
+```
+type=[Material];name=[Name];buy_price=[Name];sell_price=[Name];meta=[Name]
+```
+
+######Set id of the catergory :
+```yaml
+categorys:
+- [Id of the catergory]
+```
+######Set name of the catergory :
+```yaml
+categorys_names:
+- [Name of the catergory]
+```
+
+######Set catergory icon:
+```yaml
+categorys_parameters:
+  Vegetables:
+    item: [Catergory icon item]
+    color: [Catergory color]
+    id: [Catergory id number]
+```
+
+######Set content of the catergory:
+
+List all items in categorys_content:
+
+```yaml
+categorys_content:
+  [Id of the catergory]:
+    - type=[Material];name=[Name];buy_price=[Name];sell_price=[Name];meta=[Name]
+```
+    
+
+### UraCraft default config :
 ```yaml
 categorys:
 - Vegetables
@@ -70,4 +111,6 @@ categorys_content:
     - type=DIRT;name=Lingot d'argent;buy_price=410;sell_price=91;meta=0
     - type=DIRT;name=Lingot d'ura;buy_price=650;sell_price=144;meta=0
     - type=DIRT;name=Lingot de néodyme;buy_price=880;sell_price=195;meta=0
-    - type=GLOWSTONE_DUST;name=Glowstone;buy_price=8;sell_price=1;meta=0```
+    - type=GLOWSTONE_DUST;name=Glowstone;buy_price=8;sell_price=1;meta=0
+  ```
+

@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -66,7 +67,7 @@ public class UraShop extends JavaPlugin {
 
             for (String category : data.getStringList("categorys")) {
                 String path = "categorys_parameters." + category;
-                HashMap<String, String> item_data = convertItemData(data.getString(path + ".item"),3);
+                HashMap<String, String> item_data = convertItemData(data.getString(path + ".item"), 3);
                 ItemStack stack = new ItemStack(Material.getMaterial(item_data.get("type")));
                 ItemMeta meta = stack.getItemMeta();
                 meta.setDisplayName(ChatColor.valueOf(item_data.get("color")) + item_data.get("name"));
@@ -90,7 +91,7 @@ public class UraShop extends JavaPlugin {
             int next_index = i == 0 ? 0 : pointers[i - 1] + 1;
             int index_end = data.indexOf("=", next_index);
             pointers[i] = data.indexOf(";", next_index);
-            hash.put(data.substring(next_index, index_end), data.substring(index_end + 1, i == number_of_data-1 ? data.length() : pointers[i]));
+            hash.put(data.substring(next_index, index_end), data.substring(index_end + 1, i == number_of_data - 1 ? data.length() : pointers[i]));
         }
 
         return hash;
@@ -137,8 +138,70 @@ public class UraShop extends JavaPlugin {
         return inventory;
     }
 
+    public Inventory sellInventory(String title, int quantity) {
+        Inventory inventory = Bukkit.createInventory(null, 5 * 9, title);
+
+        ItemStack pannel = customItemStack(Material.STAINED_GLASS_PANE, " ", (byte) 7);
+        ItemStack arrow = customItemStack(Material.ARROW, ChatColor.RED + "Back");
+
+        for (int i = 0; i < inventory.getSize(); i++) {
+            if (i < 9 || i > inventory.getSize() - 9 || i % 9 == 0 || i % 9 == 8) {
+                inventory.setItem(i, pannel);
+            }
+            if (i == inventory.getSize() - 5) {
+                inventory.setItem(i, arrow);
+            }
+        }
+        inventory.setItem(13, customItemStack(Material.BOOK_AND_QUILL, ChatColor.LIGHT_PURPLE + "Editer la quantité"));
+        inventory.setItem(19, customItemStack(Material.STAINED_GLASS_PANE, ChatColor.RED + "-32", 32, (byte) 14));
+        inventory.setItem(20, customItemStack(Material.STAINED_GLASS_PANE, ChatColor.RED + "-16", 16, (byte) 14));
+        inventory.setItem(21, customItemStack(Material.STAINED_GLASS_PANE, ChatColor.RED + "-1", (byte) 14));
+
+        inventory.setItem(25, customItemStack(Material.STAINED_GLASS_PANE, ChatColor.GREEN + "+32", 32, (byte) 5));
+        inventory.setItem(24, customItemStack(Material.STAINED_GLASS_PANE, ChatColor.GREEN + "+16", 16, (byte) 5));
+        inventory.setItem(23, customItemStack(Material.STAINED_GLASS_PANE, ChatColor.GREEN + "+1", (byte) 5));
+
+        inventory.setItem(37, customItemStack(Material.ENDER_CHEST, ChatColor.DARK_RED + "Vendre tout"));
+        inventory.setItem(38, customItemStack(Material.CHEST, ChatColor.DARK_RED + "Vendre " + quantity));
+
+        inventory.setItem(43, customItemStack(Material.PAPER, ChatColor.DARK_GREEN + "Acheter " + quantity));
+        return inventory;
+    }
+
+    public int getItemActionId(ItemStack stack) {
+
+        Inventory inventory = sellInventory("",1);
+        ItemStack pannel = customItemStack(Material.STAINED_GLASS_PANE, " ", (byte) 7);
+
+        ItemMeta stack_meta = stack.getItemMeta();
+        if(stack_meta.getDisplayName().contains(ChatColor.DARK_GREEN + "Acheter ") && stack.getType() == Material.PAPER){
+            return 0;
+        }else if(stack_meta.getDisplayName().contains(ChatColor.DARK_RED + "Vendre ") && stack.getType() == Material.CHEST){
+            return 1;
+        }
+
+        int id = 1;
+        for (int i = 0; i < 45; i++){
+            if(!inventory.getItem(i).equals(pannel) && inventory.getItem(i) != null){
+                id ++;
+            }
+            if(inventory.getItem(i).equals(stack)){
+                return id;
+            }
+        }
+        return -1;
+    }
+
     public ItemStack customItemStack(Material material, String name) {
         ItemStack stack = new ItemStack(material);
+        ItemMeta meta = stack.getItemMeta();
+        meta.setDisplayName(name);
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
+    public ItemStack customItemStack(Material material, String name, int quatity, byte metadata) {
+        ItemStack stack = new ItemStack(material, quatity, metadata);
         ItemMeta meta = stack.getItemMeta();
         meta.setDisplayName(name);
         stack.setItemMeta(meta);
@@ -153,6 +216,16 @@ public class UraShop extends JavaPlugin {
         stack.setItemMeta(meta);
         return stack;
     }
+
+    public ItemStack customItemStack(Material material, String name, byte metadata, List<String> lore) {
+        ItemStack stack = new ItemStack(material,1, metadata);
+        ItemMeta meta = stack.getItemMeta();
+        meta.setDisplayName(name);
+        meta.setLore(lore);
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
 
     public ItemStack customItemStack(Material material, String name, byte metadata) {
         ItemStack stack = new ItemStack(material, 1, metadata);
@@ -178,27 +251,48 @@ public class UraShop extends JavaPlugin {
         return inventory;
     }
 
-    public String getCategory(ItemStack stack){
+    public String getCategory(ItemStack stack) {
         FileConfiguration data = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
 
         for (String category : data.getStringList("categorys")) {
-            String item_data = data.getString("categorys_parameters." + category +".item");
-            HashMap<String,String> item_hash = convertItemData(item_data,3);
-            if(stack.equals(customItemStack(Material.getMaterial(item_hash.get("type")),ChatColor.valueOf(item_hash.get("color")) + item_hash.get("name")))){
+            String item_data = data.getString("categorys_parameters." + category + ".item");
+            HashMap<String, String> item_hash = convertItemData(item_data, 3);
+            if (stack.equals(customItemStack(Material.getMaterial(item_hash.get("type")), ChatColor.valueOf(item_hash.get("color")) + item_hash.get("name")))) {
                 return category;
             }
         }
         return null;
     }
-/*
-    public int getItemCategory(ItemStack stack){
+
+    public int getItemCategory(ItemStack stack) {
         FileConfiguration data = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
 
-        for (String category : data.getStringList("categorys_names")) {
+        for (String category : data.getStringList("categorys")) {
             List<String> content = data.getStringList("categorys_content." + category);
-            content.
+            int category_id = data.getInt("categorys_parameters." + category + "id");
+            ChatColor category_color = ChatColor.valueOf(data.getString("categorys_parameters." + category + ".color"));
+            for (String raw_item : content) {
+                HashMap<String, String> item_data = convertItemData(raw_item, 4);
+                ItemStack item = customItemStack(Material.getMaterial(item_data.get("type")), category_color + item_data.get("name"), Arrays.asList(ChatColor.GRAY + "Prix d'achat à l'unité : " + item_data.get("buy_price") + "$", ChatColor.GRAY + "Prix de vente à l'unité : " + item_data.get("sell_price") + "$"));
+                if (item.equals(stack)) {
+                    return category_id;
+                }
+            }
         }
-    }*/
+        return -1;
+    }
+
+    public String getCategoryById(int id) {
+        FileConfiguration data = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
+
+        for (String category : data.getStringList("categorys")) {
+            int category_id = data.getInt("categorys_parameters." + category + ".id");
+            if (id == category_id) {
+                return category;
+            }
+        }
+        return null;
+    }
 
 
 }

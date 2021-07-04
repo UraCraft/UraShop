@@ -40,7 +40,7 @@ categorys_content:
     - type=CACTUS;name=Cactus;buy_price=4;sell_price=1;meta=0
     - type=INK_SACK;name=Fève de cacao;buy_price=4;sell_price=0;meta=3
   Loots:
-    - type=STRING;name=Fil;buy_price8=;sell_price=1;meta=0
+    - type=STRING;name=Fil;buy_price=8;sell_price=1;meta=0
     - type=SPIDER_EYE;name=Oeil d'araignée;buy_price=16;sell_price=3;meta=0
     - type=BONE;name=Os;buy_price=12;sell_price=2;meta=0
     - type=SULPHUR;name=Poudre à canon;buy_price=20;sell_price=4;meta=0
@@ -52,4 +52,22 @@ categorys_content:
     - type=RAW_FISH;name=Poisson;buy_price=40;sell_price=8;meta=0
     - type=BLAZE_ROD;name=Bâton de Blaze;buy_price=100;sell_price=22;meta=0
     - type=SLIME_BALL;name=Boule de slime;buy_price=50;sell_price=11;meta=0
-    - type=SKULL_ITEM;name=Tête de wither squelette;buy_price=25000;sell_price=11250;meta=1```
+    - type=SKULL_ITEM;name=Tête de wither squelette;buy_price=25000;sell_price=11250;meta=1
+  Minerals:
+    - type=COBBLESTONE;name=Pierre;buy_price=1;sell_price=0;meta=0
+    - type=DIRT;name=Terre;buy_price=1;sell_price=0;meta=0
+    - type=SAND;name=Sable;buy_price=2;sell_price=0;meta=0
+    - type=SOUL_SAND;name=Sable des âmes;buy_price=8;sell_price=1;meta=0
+    - type=OBSIDIAN;name=Obsidienne;buy_price=24;sell_price=5;meta=0
+    - type=COAL;name=Charbon;buy_price=16;sell_price=3;meta=0
+    - type=REDSTONE;name=Redstone;buy_price=8;sell_price=1;meta=0
+    - type=IRON_INGOT;name=Lingot de fer;buy_price=30;sell_price=6;meta=0
+    - type=GOLD_INGOT;name=Lingot d'or;buy_price=80;sell_price=17;meta=0
+    - type=QUARTZ;name=Quartz;buy_price=5;sell_price=1;meta=0
+    - type=INK_SACK;name=Lapis-lazuli;buy_price=15;sell_price=4;meta=4
+    - type=DIAMOND;name=Diamant;buy_price=320;sell_price=71;meta=0
+    - type=EMERALD;name=Emeraude;buy_price=200;sell_price=44;meta=0
+    - type=DIRT;name=Lingot d'argent;buy_price=410;sell_price=91;meta=0
+    - type=DIRT;name=Lingot d'ura;buy_price=650;sell_price=144;meta=0
+    - type=DIRT;name=Lingot de néodyme;buy_price=880;sell_price=195;meta=0
+    - type=GLOWSTONE_DUST;name=Glowstone;buy_price=8;sell_price=1;meta=0```

@@ -1,6 +1,6 @@
 # UraShop
 
-###Configuration syntax:
+##Configuration syntax:
 
 ###Create catergory :
 
@@ -41,7 +41,7 @@ categorys_content:
 ```
     
 
-### UraCraft default config :
+## UraCraft default config :
 ```yaml
 categorys:
 - Vegetables

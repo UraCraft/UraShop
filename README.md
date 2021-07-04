@@ -2,26 +2,26 @@
 
 ### Configuration syntax:
 
-####Create catergory :
+###Create catergory :
 
-######Item syntax:
+**Item syntax:**
 
 ```
 type=[Material];name=[Name];buy_price=[Name];sell_price=[Name];meta=[Name]
 ```
 
-######Set id of the catergory :
+**Set id of the catergory :**
 ```yaml
 categorys:
 - [Id of the catergory]
 ```
-######Set name of the catergory :
+**Set name of the catergory :**
 ```yaml
 categorys_names:
 - [Name of the catergory]
 ```
 
-######Set catergory icon:
+**Set catergory icon:**
 ```yaml
 categorys_parameters:
   Vegetables:
@@ -30,7 +30,7 @@ categorys_parameters:
     id: [Catergory id number]
 ```
 
-######Set content of the catergory:
+**Set content of the catergory:**
 
 List all items in categorys_content:
 
